@@ -52,7 +52,7 @@
     "subset-font": "^2.9.0",
     "typescript": "^6.0.3",
     "vite-plugin-pagefind": "^1.1.1",
-    "vite-plugin-pwa": "^1.3.0",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.5"
   },
   "overrides": {
