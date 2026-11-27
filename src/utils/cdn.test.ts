@@ -6,8 +6,7 @@ import {
   shouldRewriteCdnUrl,
   toAbsoluteImageUrl,
 } from './cdn';
-
-const BASE = 'https://cdn.jsdelivr.net/gh/hyngng/hyngng.github.io.resources@master';
+import { SITE } from '../settings/site.settings';
 
 describe('shouldRewriteCdnUrl', () => {
   it('rewrites relative and root-relative paths', () => {
@@ -23,9 +22,9 @@ describe('shouldRewriteCdnUrl', () => {
 });
 
 describe('rewriteToCdnUrl', () => {
-  it('resolves absolute and relative paths against the CDN base', () => {
-    expect(rewriteToCdnUrl('/2026-01-01/foo.webp')).toBe(`${BASE}/2026-01-01/foo.webp`);
-    expect(rewriteToCdnUrl('avatar/foo.webp')).toBe(`${BASE}/avatar/foo.webp`);
+  it('keeps root-relative paths and makes relative paths root-relative', () => {
+    expect(rewriteToCdnUrl('/2026-01-01/foo.webp')).toBe('/2026-01-01/foo.webp');
+    expect(rewriteToCdnUrl('avatar/foo.webp')).toBe('/avatar/foo.webp');
   });
 });
 
@@ -46,8 +45,8 @@ describe('isLocalAbsolutePath', () => {
 });
 
 describe('toAbsoluteImageUrl', () => {
-  it('resolves absolute paths against the CDN base', () => {
-    expect(toAbsoluteImageUrl('/2026-01-01/foo.webp')).toBe(`${BASE}/2026-01-01/foo.webp`);
+  it('resolves local paths against the site URL when no CDN base is configured', () => {
+    expect(toAbsoluteImageUrl('/2026-01-01/foo.webp')).toBe(`${SITE.url}/2026-01-01/foo.webp`);
   });
 
   it('passes through full URLs unchanged', () => {
@@ -62,12 +61,12 @@ describe('toAbsoluteImageUrl', () => {
 });
 
 describe('resolveCdnPath', () => {
-  it('resolves relative paths against the CDN base', () => {
-    expect(resolveCdnPath('avatar/foo.webp')).toBe(`${BASE}/avatar/foo.webp`);
+  it('makes relative paths root-relative when no CDN base is configured', () => {
+    expect(resolveCdnPath('avatar/foo.webp')).toBe('/avatar/foo.webp');
   });
 
-  it('resolves absolute paths against the CDN base', () => {
-    expect(resolveCdnPath('/avatar/foo.webp')).toBe(`${BASE}/avatar/foo.webp`);
+  it('keeps absolute paths local when no CDN base is configured', () => {
+    expect(resolveCdnPath('/avatar/foo.webp')).toBe('/avatar/foo.webp');
   });
 
   it('passes through http(s) URLs unchanged', () => {

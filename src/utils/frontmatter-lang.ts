@@ -28,5 +28,5 @@ export function getFrontmatterPersona(raw: string): string {
   if (typeof rawPersonas === 'string' && rawPersonas.trim()) {
     return rawPersonas.trim();
   }
-  return 'dev';
+  return 'blog';
 }

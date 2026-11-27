@@ -1,7 +1,7 @@
 import type { Locale } from './index';
 
 const locale: Locale = {
-  description: 'Saludos 🔥',
+  description: 'Un tema de blog minimalista centrado en la tipografía, creado con Astro.',
   frame: {
     lang: 'ES',
     langAria: 'Cambiar idioma',

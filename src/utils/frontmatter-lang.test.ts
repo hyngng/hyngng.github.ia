@@ -3,7 +3,7 @@ import { getFrontmatterLang, getFrontmatterPersona } from './frontmatter-lang';
 
 describe('frontmatter extraction', () => {
   it('reads a language from frontmatter, including a BOM', () => {
-    const raw = '\uFEFF---\nlang: ko-KR\npersonas:\n  - hyngng\n---\nbody';
+    const raw = '\uFEFF---\nlang: ko-KR\npersonas:\n  - blog\n---\nbody';
     expect(getFrontmatterLang(raw)).toBe('ko-KR');
   });
 
@@ -12,9 +12,9 @@ describe('frontmatter extraction', () => {
     expect(getFrontmatterLang('---\ntitle: Post\n---\nbody')).toBeUndefined();
   });
 
-  it('reads the first persona and falls back to dev', () => {
-    expect(getFrontmatterPersona('---\npersonas:\n  - hyngng\n  - guest\n---')).toBe('hyngng');
+  it('reads the first persona and falls back to blog', () => {
+    expect(getFrontmatterPersona('---\npersonas:\n  - blog\n  - guest\n---')).toBe('blog');
     expect(getFrontmatterPersona('---\npersonas: guest\n---')).toBe('guest');
-    expect(getFrontmatterPersona('---\ntitle: Post\n---')).toBe('dev');
+    expect(getFrontmatterPersona('---\ntitle: Post\n---')).toBe('blog');
   });
 });

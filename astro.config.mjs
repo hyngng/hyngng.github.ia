@@ -59,7 +59,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     validateRoutes(),
-    // Fuwari-style page transitions (see docs/ai-docs/design/frame-layout.md):
+    // Fuwari-style page transitions (see .github/docs/common/layout.md):
     // only the <main> content container is swapped; the frame chrome stays
     // live, so its animations run through the swap untouched.
     swup({
@@ -118,7 +118,7 @@ export default defineConfig({
           ]
         },
         workbox: {
-          // Chirpy-style Cache-First model (see docs/ai-docs/features/pwa.md).
+          // Chirpy-style Cache-First model (see .github/docs/features/pwa.md).
           // Precache immutable hashed assets, chunk HTML fragments (offline
           // post loading) and the home pages (the offline entry points for
           // every locale). General HTML pages and CDN images are cached at
@@ -231,7 +231,7 @@ export default defineConfig({
       // Prevent dev-toolbar MIME error (empty Content-Type): mermaid is only
       // dynamically imported at runtime in mermaidThemeSync.ts, so it misses
       // the initial scan and triggers dep re-optimization during dev.
-      // Pre-bundling it avoids that race. See docs/ai-docs/development/build-cache.md
+      // Pre-bundling it avoids that race.
       include: ['mermaid'],
     },
   },

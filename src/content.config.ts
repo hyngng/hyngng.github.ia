@@ -10,7 +10,7 @@ import { isLocalAbsolutePath, toAbsoluteImageUrl } from './utils/cdn';
 const personaSchema = z
   .union([z.enum(PERSONA_IDS), z.array(z.enum(PERSONA_IDS)).min(1)])
   .transform(v => Array.isArray(v) ? v : [v])
-  .default(['dev']);
+  .default(['blog']);
 
 function warnRelativeImagePath(value: string, field: string): void {
   if (!isLocalAbsolutePath(value) && !/^https?:\/\//i.test(value)) {

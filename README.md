@@ -1,6 +1,6 @@
 # Vignette Theme
 
-Astro 7 기반의 개인 블로그 테마입니다.
+Astro 기반의 블로그 테마입니다.
 
 ## 요구사항
 
@@ -57,9 +57,9 @@ npm run dev
 | Reddit Mono | self-host (`public/fonts/Reddit_Mono/`) | 코드 블록용 WOFF2 variable font |
 | KaTeX 0.19 CSS·폰트 | Vite 로컬 asset (`katex/dist/katex.min.css?url`) | 수식 있는 포스트만 로드 |
 | Mermaid 12 | 로컬 npm 번들 | 다이어그램 (IntersectionObserver 지연 렌더) |
-| 포스트 이미지 | jsDelivr CDN (`SITE.cdn.imageBaseUrl`) | `src/plugins`/`src/utils/cdn.ts`에서 URL 변환 |
+| 포스트 이미지 | 로컬 `public/` 또는 절대 URL | `SITE.cdn.imageBaseUrl`이 비어 있으면 경로를 그대로 사용 |
 
-> `Head.astro`의 preconnect는 이미지 CDN과 분석 도구용입니다. 폰트·KaTeX·Mermaid는 빌드 산출물 또는 로컬 번들에서 제공됩니다.
+> `SITE.resourceHints`에 원본을 추가하면 `Head.astro`가 preconnect를 출력합니다. 기본값은 빈 배열입니다. 폰트·KaTeX·Mermaid는 빌드 산출물 또는 로컬 번들에서 제공됩니다.
 
 ## 커스터마이징
 
@@ -67,13 +67,13 @@ npm run dev
 
 `src/settings/site.settings.ts`에서 사이트 제목, 설명, URL, 소셜 링크 등을 수정합니다.
 
-지원 언어는 포스트 프론트매터의 `lang` 값에서 빌드 시점에 **자동 파생**되므로 중앙 목록 편집이 필요 없습니다(자세한 규칙은 `docs/ai-docs/configuration/locales.md` 참고). `src/settings/site.settings.ts`의 `LOCALE_REGISTRY`는 알려진 언어의 SEO 메타 보강용이며, `defaultLocale`(`ko`)은 항상 포함됩니다.
+지원 언어는 포스트 프론트매터의 `lang` 값에서 빌드 시점에 **자동 파생**되므로 중앙 목록 편집이 필요 없습니다. `defaultLocale`(`ko-KR`)은 항상 포함되며, BCP 47 구조는 `Intl.Locale`로 계산됩니다. 자세한 배경은 [.github/docs/platform/i18n.md](.github/docs/platform/i18n.md)를 참고하세요.
 
 SNS/공유 메타데이터:
 
 - **`ogImage`** — 기본 OG 이미지(`public/default-og.webp`, 1200x630). 포스트에 별도 이미지가 없을 때 `og:image`/`twitter:image`로 사용됩니다.
 - **`social.fediverse`** — Fediverse 핸들(`@user@domain`). `fediverse:creator` meta로 출력됩니다. 포스트는 페르소나별 `social.fediverse`를 우선하고, 없으면 이 값으로 폴백합니다.
-- **`resourceHints`** — 외부 CDN(jsdelivr/googletagmanager) preconnect 목록. `Head.astro`에서 `<link rel="preconnect">`로 조건부 출력됩니다.
+- **`resourceHints`** — 외부 CDN·분석 도구의 preconnect 목록. `Head.astro`에서 `<link rel="preconnect">`로 조건부 출력됩니다. 기본값은 빈 배열입니다.
 - `twitter:card`는 기본값 `summary_large_image`로 출력됩니다.
 
 ### 웹 분석 (Analytics)
@@ -82,19 +82,19 @@ SNS/공유 메타데이터:
 
 ```ts
 analytics: {
-  google: { id: undefined },              // 'G-XXXXXXX' (Google Analytics 4)
-  googleTagManager: { id: 'GTM-XXXXXXX' }, // Google Tag Manager
-  goatcounter: { id: undefined },         // 'your-code' (GoatCounter)
-  adsense: { client: 'ca-pub-...', adSlot: '...' }, // Google AdSense
+  google: { id: '' },              // 'G-XXXXXXX' (Google Analytics 4)
+  googleTagManager: { id: '' },    // 'GTM-XXXXXXX'
+  goatcounter: { id: '' },         // 'your-code' (GoatCounter)
+  adsense: { client: '', adSlot: '' }, // Google AdSense
 },
 ```
 
 - **Google Analytics**: `google.id` 설정 시 `<head>`에 gtag.js가 자동 삽입됩니다.
 - **Google Tag Manager**: `googleTagManager.id` 설정 시 `<head>`에 GTM 컨테이너 스크립트가 자동 삽입됩니다.
 - **GoatCounter**: `goatcounter.id` 설정 시 `<head>`에 트래킹 스크립트가 자동 삽입됩니다.
-- **AdSense**: `adsense.client`/`adsense.adSlot` 사용. `src/components/seo/analytics/Adsense.astro` 컴포넌트로 포스트 레이아웃(`PostLayout.astro`) 본문 상단에 연결되어 있으며, 포스트 프론트매터의 `start_with_ads: true` 설정 시 조건부 노출됩니다. AdSense 승인에는 `/ads.txt`가 필요하며 `public/ads.txt`에서 관리됩니다 (클라이언트 ID 변경 시 함께 수정).
+- **AdSense**: 기본적으로 비활성화되어 있습니다. 사용하려면 `adsense.client`/`adsense.adSlot`을 채우고, AdSense 승인에 필요한 `public/ads.txt`를 직접 추가하세요. `src/components/seo/analytics/Adsense.astro` 컴포넌트는 포스트 프론트매터의 `start_with_ads: true` 설정 시 조건부 노출됩니다.
 
-각 도구는 `src/components/seo/analytics/` 아래에 컴포넌트로 분리되어 있으며, 값이 `undefined`면 로드되지 않습니다. 또한 분석 스크립트는 **프로덕션 빌드(`astro build`)에서만** 로드됩니다. (`import.meta.env.PROD` 게이트 — dev 서버에서 로드되지 않아 개발 중 콘솔 에러와 분석 트래픽 오염을 방지)
+각 도구는 `src/components/seo/analytics/` 아래에 컴포넌트로 분리되어 있으며, 값이 비어 있으면 로드되지 않습니다. 또한 분석 스크립트는 **프로덕션 빌드(`astro build`)에서만** 로드됩니다. (`import.meta.env.PROD` 게이트 — dev 서버에서 로드되지 않아 개발 중 콘솔 에러와 분석 트래픽 오염을 방지)
 
 ### 웹마스터 도구 검증 (Webmaster Verification)
 
@@ -102,20 +102,21 @@ analytics: {
 
 ```ts
 verification: {
-  google: undefined,   // Google Search Console
-  yandex: undefined,   // Yandex Webmaster
-  baidu: undefined,    // Baidu Webmaster
-  pinterest: '...',    // Pinterest
+  google: undefined,     // Google Search Console
+  yandex: undefined,     // Yandex Webmaster
+  baidu: undefined,      // Baidu Webmaster
+  pinterest: undefined,  // Pinterest
+  daum: undefined,       // Daum Webmaster (robots.txt)
 },
 ```
 
 값이 설정되면 `src/components/seo/webmasters_verifications/WebmasterVerifications.astro`가 해당 `<meta name="...-site-verification">`를 `<head>`에 조건부 출력합니다.
 
-> Bing은 Google Search Console과 연동되는 구조라 별도 검증 설정이 필요 없으며, Daum은 별도로 처리되어 검증 대상에서 제외됩니다.
+> Bing은 Google Search Console과 연동되는 구조라 별도 검증 설정이 필요 없습니다. Daum 값은 `robots.txt`에 그대로 출력됩니다.
 
 ### 페르소나 설정
 
-`src/settings/personas.settings.ts`에서 페르소나 정보를 추가하거나 수정합니다. 포스트 프론트매터의 `personas` 필드와 연결됩니다. 검색·라우팅·화면 표시는 페르소나를 기준으로 하며, SEO 메타데이터처럼 표준이 `author`를 요구하는 출력은 렌더링 단계에서 변환합니다.
+`src/settings/personas.settings.ts`에서 페르소나 정보를 추가하거나 수정합니다. 기본 설정은 `art`와 `blog` 두 개이며, 포스트 프론트매터의 `personas` 필드와 연결됩니다. 검색·라우팅·화면 표시는 페르소나를 기준으로 하며, SEO 메타데이터처럼 표준이 `author`를 요구하는 출력은 렌더링 단계에서 변환합니다.
 
 ### 폰트 설정
 
@@ -126,11 +127,11 @@ Pretendard는 self-host하며 **400/700 두 weight만** 사용합니다. 빌드 
 - **`src/settings/site.settings.ts`** — `fonts.baseStack`에서 `var(--font-pretendard)` 사용
 - **`npm run fonts`** — 서브셋 수동 재생성 (`predev`/`prebuild`에서 자동 실행)
 
-코드용 Reddit Mono는 `public/fonts/Reddit_Mono/`의 WOFF2 variable font를 사용합니다. 자세한 구조는 `docs/ai-docs/typography/fonts.md`를 참고하세요.
+코드용 Reddit Mono는 `public/fonts/Reddit_Mono/`의 WOFF2 variable font를 사용합니다.
 
 ### 보안 헤더
 
-이 사이트는 GitHub Pages에 배포되므로 CSP, HSTS, `X-Frame-Options` 같은 응답 헤더를 저장소 설정만으로 지정할 수 없습니다. 현재는 외부 스크립트를 `site.settings.ts`에서 명시적으로 켜고, 의존성 감사(`npm audit --omit=dev --audit-level=high`)를 CI에서 수행하는 범위까지 적용했습니다. 헤더 정책은 Cloudflare/Netlify 등 헤더 제어가 가능한 호스팅으로 이전할 때 적용해야 합니다. 상세는 `docs/ai-docs/configuration/security.md`를 참고하세요.
+이 사이트는 GitHub Pages에 배포되므로 CSP, HSTS, `X-Frame-Options` 같은 응답 헤더를 저장소 설정만으로 지정할 수 없습니다. 현재는 외부 스크립트를 `site.settings.ts`에서 명시적으로 켜고, 의존성 감사(`npm audit --omit=dev --audit-level=high`)를 CI에서 수행하는 범위까지 적용했습니다. 헤더 정책은 Cloudflare/Netlify 등 헤더 제어가 가능한 호스팅으로 이전할 때 적용해야 합니다.
 
 ### 다국어
 
@@ -138,7 +139,7 @@ Pretendard는 self-host하며 **400/700 두 weight만** 사용합니다. 빌드 
 
 - `{BCP-47}.ts` — 해당 로케일의 UI 문자열. 현재 파일은 자동 검색되며 별도 등록이 필요하지 않습니다.
 
-새 언어로 포스트를 작성하려면 프론트매터에 `lang: xx`만 설정하면 됩니다(중앙 목록 불필요). 사이트 크롬(UI)도 번역하려면 `src/locales/xx-XX.ts`를 추가하고 `Locale` 인터페이스를 구현하세요. 로케일 모듈은 자동 검색되므로 별도 목록 등록은 필요하지 않습니다. 자세한 규칙은 `docs/ai-docs/configuration/locales.md`를 참고하세요.
+새 언어로 포스트를 작성하려면 프론트매터에 `lang: xx`만 설정하면 됩니다(중앙 목록 불필요). 사이트 크롬(UI)도 번역하려면 `src/locales/xx-XX.ts`를 추가하고 `Locale` 인터페이스를 구현하세요. 로케일 모듈은 자동 검색되므로 별도 목록 등록은 필요하지 않습니다. 자세한 배경은 [.github/docs/platform/i18n.md](.github/docs/platform/i18n.md)를 참고하세요.
 
 ### 디자인 토큰
 
@@ -146,7 +147,7 @@ Pretendard는 self-host하며 **400/700 두 weight만** 사용합니다. 빌드 
 
 ## 콘텐츠 작성
 
-포스트는 `posts/` 아래 `.md` 또는 `.mdx` 파일로 작성합니다 (예: `posts/ko/blog/2026-01-01-example.md`). 페르소나 값 `blog`는 폴더명과 프론트매터의 `personas` 값, URL, 화면의 `@blog` 표기에 공통으로 사용합니다. 파일명은 `YYYY-MM-DD-{slug}` 형식입니다. 언어는 **프론트매터 `lang` 필드**(2자리 코드, 예: `ko`, `en`, `ru`, `fr`, `es`, `ja`, `zh`)로 지정합니다. `lang` 값을 가진 포스트가 있으면 해당 언어가 자동 지원됩니다. 기본 언어(`ko`) 외 언어는 라우팅에서 `/en/`, `/ru/` 등 접두사가 붙습니다.
+포스트는 `posts/` 아래 `.md` 또는 `.mdx` 파일로 작성합니다 (예: `posts/ko/blog/2026-01-01-example.md`). 페르소나 값 `blog`는 폴더명과 프론트매터의 `personas` 값, URL, 화면의 `@blog` 표기에 공통으로 사용합니다. 파일명은 `YYYY-MM-DD-{slug}` 형식입니다. 언어는 **프론트매터 `lang` 필드**(2자리 코드, 예: `ko`, `en`, `ru`, `fr`, `es`, `ja`, `zh`)로 지정합니다. `lang` 값을 가진 포스트가 있으면 해당 언어가 자동 지원됩니다. 기본 언어(`ko-KR`) 외 언어는 라우팅에서 `/en/`, `/ru/` 등 접두사가 붙습니다.
 
 ### 프론트매터 예시
 

@@ -39,7 +39,7 @@ Content`;
   it('extracts primary persona from personas array', () => {
     const raw = `---
 title: Test
-personas: [blog, dev]
+personas: [blog, art]
 ---
 Content`;
     expect(getFrontmatterPersona(raw)).toBe('blog');
@@ -48,17 +48,17 @@ Content`;
   it('extracts primary persona from single personas string', () => {
     const raw = `---
 title: Test
-personas: essay
+personas: art
 ---
 Content`;
-    expect(getFrontmatterPersona(raw)).toBe('essay');
+    expect(getFrontmatterPersona(raw)).toBe('art');
   });
 
-  it('falls back to dev when persona is omitted', () => {
+  it('falls back to blog when persona is omitted', () => {
     const raw = `---
 title: Test
 ---
 Content`;
-    expect(getFrontmatterPersona(raw)).toBe('dev');
+    expect(getFrontmatterPersona(raw)).toBe('blog');
   });
 });

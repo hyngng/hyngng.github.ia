@@ -1,12 +1,14 @@
 import { SITE } from '../settings/site.settings';
 
 const cdnImageBaseUrl = SITE.cdn.imageBaseUrl.replace(/\/$/, '');
+const siteBaseUrl = SITE.url.replace(/\/$/, '');
 
 export function isLocalAbsolutePath(url: string): boolean {
   return url.startsWith('/') && !url.startsWith('//');
 }
 
 function withCdnBase(path: string): string {
+  if (!cdnImageBaseUrl) return path.startsWith('/') ? path : `/${path}`;
   return cdnImageBaseUrl + (path.startsWith('/') ? '' : '/') + path;
 }
 
@@ -23,7 +25,8 @@ export function rewriteToCdnUrl(url: string): string {
 
 export function toAbsoluteImageUrl(val?: string): string | undefined {
   if (!val) return undefined;
-  return isLocalAbsolutePath(val) ? `${cdnImageBaseUrl}${val}` : val;
+  if (!isLocalAbsolutePath(val)) return val;
+  return `${cdnImageBaseUrl || siteBaseUrl}${val}`;
 }
 
 export function resolveCdnPath(path?: string): string {

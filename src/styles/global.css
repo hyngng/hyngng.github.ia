@@ -345,7 +345,7 @@ html.modal-open {
    a near-invisible drop shadow plus a hairline ring in light, a soft glow
    plus a light hairline in dark. Box-shadows map into the browser's
    brighter shadow band in forced dark, so the boundary survives. Theme
-   colors stay untouched. See docs/ai-docs/features/theme-toggle.md. */
+   colors stay untouched. See .github/docs/features/dark-mode.md. */
 .post-card,
 .load-more-card:not([hidden]) {
   box-shadow: var(--color-card-shadow);

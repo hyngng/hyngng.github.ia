@@ -1,7 +1,7 @@
 import type { Locale } from './index';
 
 const locale: Locale = {
-  description: '你好 🔥',
+  description: '一个专注于排版的极简 Astro 博客主题。',
   frame: {
     lang: 'ZH',
     langAria: '选择语言',

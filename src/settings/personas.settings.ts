@@ -52,17 +52,13 @@ export type Persona = Omit<PersonaData, 'description'> & { name: PersonaId; desc
 export const PERSONA_PREFIX = '@';
 
 // ── Persona map ───────────────────────────────────────────
-// Reference in frontmatter by persona ID, e.g. 'dev'
+// Reference in frontmatter by persona ID, e.g. 'blog'
 
 export const PERSONAS = {
 
   art: {
-    avatar: 'avatar/hyngng-art.webp',
-    social: {
-      instagram: 'hyngng.art',
-      // fediverse: '@hyngng.art@threads.net',
-      // website: 'https://hyngng.art',
-    },
+    avatar: '/assets/img/avatar-art.svg',
+    social: {},
     description: {
       'ko-KR': '그림과 그림에 대한 생각을 정리합니다.',
       'en-US': 'Organizing artwork and thoughts about art.',
@@ -74,49 +70,9 @@ export const PERSONAS = {
     },
   },
 
-  photography: {
-    avatar: 'avatar/hyngng-photography.webp',
-    social: {
-      // fediverse: '@hyngng.essay@threads.net',
-    },
-    description: {
-      'ko-KR': '사진과 사진에 대한 생각을 정리합니다.',
-      'en-US': 'Organizing photos and thoughts about photography.',
-      'ru-RU': 'Упорядочиваю фотографии и мысли о фотографии.',
-      'fr-FR': 'J\'organise mes photos et mes réflexions sur la photographie.',
-      'es-ES': 'Organizo fotos y reflexiones sobre la fotografía.',
-      'ja-JP': '写真と写真についての考えを整理しています。',
-      'zh-CN': '整理照片与关于摄影的想法。',
-    },
-  },
-
-  dev: {
-    avatar: 'avatar/hyngng-dev.webp',
-    social: {
-      // email: 'dev@example.com',
-      github: 'hyngng',
-      twitter: 'hyngng_dev',
-      // fediverse: '@hyngng.dev@threads.net',
-    },
-    description: {
-      'ko-KR': '프로그래밍과 개발 경험을 기록합니다.',
-      'en-US': 'Recording programming and development experiences.',
-      'ru-RU': 'Записываю опыт программирования и разработки.',
-      'fr-FR': 'Je consigne mes expériences de programmation et de développement.',
-      'es-ES': 'Documento mis experiencias de programación y desarrollo.',
-      'ja-JP': 'プログラミングと開発の経験を記録しています。',
-      'zh-CN': '记录编程与开发经验。',
-    },
-  },
-
   blog: {
-    avatar: 'avatar/hyngng-blog.webp',
-    social: {
-      // email: 'blog@example.com',
-      github: 'hyngng',
-      twitter: 'hyngng_blog',
-      // fediverse: '@hyngng.blog@threads.net',
-    },
+    avatar: '/assets/img/avatar-blog.svg',
+    social: {},
     description: {
       'ko-KR': '블로그 관리 기록을 정리합니다.',
       'en-US': 'Organizing blog management records.',
@@ -125,22 +81,6 @@ export const PERSONAS = {
       'es-ES': 'Organizo los registros de administración del blog.',
       'ja-JP': 'ブログ運営の記録を整理しています。',
       'zh-CN': '整理博客的管理记录。',
-    },
-  },
-
-  essay: {
-    avatar: 'avatar/hyngng-essay.webp',
-    social: {
-      // fediverse: '@hyngng.essay@threads.net',
-    },
-    description: {
-      'ko-KR': '에세이와 생각을 기록합니다.',
-      'en-US': 'Recording essays and thoughts.',
-      'ru-RU': 'Записываю эссе и мысли.',
-      'fr-FR': 'Je consigne des essais et des pensées.',
-      'es-ES': 'Documento ensayos y pensamientos.',
-      'ja-JP': 'エッセイと思いを記録しています。',
-      'zh-CN': '记录随笔与想法。',
     },
   },
 

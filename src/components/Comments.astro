@@ -2,6 +2,9 @@
 import { SITE, getLocaleEntry } from '../settings/site.settings';
 import { defaultLocale } from '../locales';
 
+const giscusEnabled = Boolean(SITE.giscus.repo && SITE.giscus.repoId);
+if (!giscusEnabled) return;
+
 const currentLocale = Astro.currentLocale || defaultLocale;
 // giscus publishes full codes only for zh*; all other locales are 2-letter.
 // Send the BCP 47 code, then mirror giscus' own normalization so we emit a

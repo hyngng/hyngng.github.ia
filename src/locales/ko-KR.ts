@@ -1,7 +1,7 @@
 import type { Locale } from './index';
 
 const locale: Locale = {
-  description: '반갑습니다 🔥',
+  description: '타이포그래피에 집중한 미니멀 Astro 블로그 테마입니다.',
   frame: {
     lang: 'KO',
     langAria: '언어 선택',

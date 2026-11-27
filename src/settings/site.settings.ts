@@ -66,14 +66,15 @@ export const SITE = {
 
   // ── Basic Info ─────────────────────────────────────────────────
 
-  title: 'HYNGNG',
+  title: 'Vignette',
   themeName: 'Vignette',
-  description: '반갑습니다 🔥',
-  username: 'hyngng',
-  url: 'https://hyngng.github.io',
+  description: 'A minimal, typography-focused blog theme built with Astro.',
+  username: '' as string,
+  url: 'https://example.com',
 
   cdn: {
-    imageBaseUrl: 'https://cdn.jsdelivr.net/gh/hyngng/hyngng.github.io.resources@master',
+    // Leave empty to serve images from this site. Set a base URL to use a CDN.
+    imageBaseUrl: '',
   },
 
   fonts: {
@@ -92,7 +93,7 @@ export const SITE = {
 
   social: {
     twitter: '' as string,
-    fediverse: '@hyngng.main@threads.net',
+    fediverse: '' as string,
   },
 
   // ── Webmaster Tools Verifications ────────────────────────────────────
@@ -101,26 +102,27 @@ export const SITE = {
     google: undefined,
     yandex: undefined,
     baidu: undefined,
-    pinterest: '150084dfff2fed3d81028aea5d976b18',
-    daum: '#DaumWebMasterTool:888dbe1bcc4e27a7b1331a7b12e15bd6a837d90cdbab04a73d9c9d8bba43bcb6:0OfsYyHnFuv/yXuBH678tw==',
+    pinterest: undefined,
+    daum: undefined,
   },
 
   // ── Web Analytics Settings ───────────────────────────────────────────
 
   analytics: {
-    google: { id: 'G-XY2QYYTPGN' },          // 'G-XXXXXXX' (Google Analytics 4)
-    googleTagManager: { id: 'GTM-T8X838Q8' }, // 'GTM-XXXXXXX'
-    goatcounter: { id: 'hyngng' },     // 'your-code'
-    adsense: { client: 'ca-pub-2168910631722247', adSlot: '9042589720' },
+    google: { id: '' as string },          // 'G-XXXXXXX' (Google Analytics 4)
+    googleTagManager: { id: '' as string }, // 'GTM-XXXXXXX'
+    goatcounter: { id: '' as string },     // 'your-code'
+    adsense: { client: '' as string, adSlot: '' as string },
   },
 
   // ── Giscus ───────────────────────────────────────────────
 
   giscus: {
-    repo: 'hyngng/hyngng.github.io',
-    repoId: 'R_kgDOH0Atrg',
-    category: 'General',
-    categoryId: 'DIC_kwDOH0Atrs4CeVis',
+    // Fill these in to enable comments. See https://giscus.app.
+    repo: '' as string,
+    repoId: '' as string,
+    category: '' as string,
+    categoryId: '' as string,
     mapping: 'pathname',
     strict: '0',
     inputPosition: 'top',
@@ -129,10 +131,8 @@ export const SITE = {
 
   // ── Resource Hints (preconnect) ──────────────────────────────
 
-  resourceHints: [
-    { origin: 'https://cdn.jsdelivr.net', crossorigin: false },          // 이미지 CDN + KaTeX
-    { origin: 'https://www.googletagmanager.com', crossorigin: false },  // GTM
-  ],
+  // Origins to preconnect to, e.g. an image CDN or analytics host.
+  resourceHints: [] as { origin: string; crossorigin?: boolean }[],
 
   // ── Posts ──────────────────────────────────────────────
 
@@ -147,7 +147,7 @@ export const SITE = {
   // ── LLMS ─────────────────────────────────────────────────
 
   llms: {
-    locale: 'en-US',
+    locale: 'ko-KR',
   },
 
 } as const;

@@ -11,7 +11,7 @@
 const stamp = Date.now().toString(36);
 
 /** Root of every PWA cache name; the activate cleanup matches on this. */
-export const pwaCacheRoot = 'hyngng-';
+export const pwaCacheRoot = 'vignette-';
 
 /** Build-time stamp identifying the current cache namespace. */
 export const pwaCacheStamp = stamp;

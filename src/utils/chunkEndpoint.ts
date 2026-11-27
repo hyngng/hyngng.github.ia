@@ -64,10 +64,11 @@ interface GetChunkRoutesOptions {
  * `/[persona]/chunk/[n]`, `/[lang]/[persona]/chunk/[n]`.
  */
 export async function getChunkRoutes(options: GetChunkRoutesOptions = {}): Promise<ChunkRoute[]> {
-  const { langs = [], personas = false } = options;
-  // Routes without a `[lang]` segment emit the default locale ('' -> defaultLocale);
-  // routes with `[lang]` emit only the non-default locales (default is unprefixed).
-  const langCodes = langs.length > 0 ? langs : [''];
+  const { langs, personas = false } = options;
+  // Routes without a `[lang]` segment omit `langs` and emit the default locale
+  // ('' -> defaultLocale); routes with `[lang]` pass an explicit list (possibly
+  // empty) and emit only those non-default locales.
+  const langCodes = langs === undefined ? [''] : langs;
   const personaIds = personas ? ALL_PERSONAS.map((a) => a.name) : [''];
 
   const routes: ChunkRoute[] = [];

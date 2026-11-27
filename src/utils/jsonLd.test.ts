@@ -27,19 +27,19 @@ describe('serializeJsonLd', () => {
 describe('buildWebSiteJsonLd', () => {
   it('emits a schema.org WebSite node', () => {
     const result = buildWebSiteJsonLd({
-      url: 'https://hyngng.github.io/',
-      name: 'HYNGNG',
-      description: 'Greetings 🔥',
-      image: 'https://hyngng.github.io/default-og.webp',
+      url: 'https://example.com/',
+      name: 'Vignette',
+      description: 'A minimal blog theme.',
+      image: 'https://example.com/default-og.webp',
     });
 
     expect(result).toEqual({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'HYNGNG',
-      url: 'https://hyngng.github.io/',
-      description: 'Greetings 🔥',
-      image: 'https://hyngng.github.io/default-og.webp',
+      name: 'Vignette',
+      url: 'https://example.com/',
+      description: 'A minimal blog theme.',
+      image: 'https://example.com/default-og.webp',
     });
   });
 });
@@ -47,15 +47,15 @@ describe('buildWebSiteJsonLd', () => {
 describe('buildBreadcrumbJsonLd', () => {
   it('assigns 1-based positions in order', () => {
     const result = buildBreadcrumbJsonLd([
-      { name: 'HYNGNG', url: 'https://hyngng.github.io/' },
-      { name: 'dev', url: 'https://hyngng.github.io/dev/' },
-      { name: 'Hello', url: 'https://hyngng.github.io/dev/hello/' },
+      { name: 'Vignette', url: 'https://example.com/' },
+      { name: 'blog', url: 'https://example.com/blog/' },
+      { name: 'Hello', url: 'https://example.com/blog/hello/' },
     ]);
 
     expect(result['@type']).toBe('BreadcrumbList');
     expect(result.itemListElement).toHaveLength(3);
-    expect(result.itemListElement[0]).toEqual({ '@type': 'ListItem', position: 1, name: 'HYNGNG', item: 'https://hyngng.github.io/' });
-    expect(result.itemListElement[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Hello', item: 'https://hyngng.github.io/dev/hello/' });
+    expect(result.itemListElement[0]).toEqual({ '@type': 'ListItem', position: 1, name: 'Vignette', item: 'https://example.com/' });
+    expect(result.itemListElement[2]).toEqual({ '@type': 'ListItem', position: 3, name: 'Hello', item: 'https://example.com/blog/hello/' });
   });
 });
 
@@ -63,11 +63,11 @@ describe('buildBlogPostingJsonLd', () => {
   const base = {
     title: 'Hello',
     description: 'A post.',
-    image: 'https://hyngng.github.io/img.webp',
+    image: 'https://example.com/img.webp',
     datePublished: '2024-01-01T00:00:00.000Z',
     dateModified: '2024-01-02T00:00:00.000Z',
     inLanguage: 'ko-KR',
-    url: 'https://hyngng.github.io/dev/hello/',
+    url: 'https://example.com/blog/hello/',
   };
 
   it('includes mainEntityOfPage pointing at the canonical url', () => {
@@ -82,19 +82,19 @@ describe('buildBlogPostingJsonLd', () => {
     const result = buildBlogPostingJsonLd({
       ...base,
       personas: [
-        { name: 'dev', url: 'https://hyngng.github.io/dev/', sameAs: ['https://github.com/hyngng'] },
-        { name: 'no-link', url: 'https://hyngng.github.io/art/', sameAs: [] },
+        { name: 'blog', url: 'https://example.com/blog/', sameAs: ['https://github.com/example'] },
+        { name: 'no-link', url: 'https://example.com/art/', sameAs: [] },
       ],
     });
 
     expect(result.author).toHaveLength(2);
     expect(result.author[0]).toEqual({
       '@type': 'Person',
-      name: 'dev',
-      url: 'https://hyngng.github.io/dev/',
-      sameAs: ['https://github.com/hyngng'],
+      name: 'blog',
+      url: 'https://example.com/blog/',
+      sameAs: ['https://github.com/example'],
     });
-    expect(result.author[1]).toEqual({ '@type': 'Person', name: 'no-link', url: 'https://hyngng.github.io/art/' });
+    expect(result.author[1]).toEqual({ '@type': 'Person', name: 'no-link', url: 'https://example.com/art/' });
   });
 });
 
@@ -102,25 +102,25 @@ describe('getPersonaProfileUrls', () => {
   it('resolves every registered platform from the social map', () => {
     const urls = getPersonaProfileUrls(
       mockPersona({
-        github: 'hyngng',
-        twitter: 'hyngng_dev',
-        instagram: 'hyngng.art',
-        website: 'https://hyngng.art',
-        fediverse: '@hyngng.dev@threads.net',
+        github: 'example',
+        twitter: 'vignette_blog',
+        instagram: 'vignette.art',
+        website: 'https://vignette.art',
+        fediverse: '@vignette@example.com',
       }),
     );
 
     expect(urls).toEqual([
-      'https://github.com/hyngng',
-      'https://x.com/hyngng_dev',
-      'https://instagram.com/hyngng.art',
-      'https://hyngng.art',
-      'https://threads.net/@hyngng.dev',
+      'https://github.com/example',
+      'https://x.com/vignette_blog',
+      'https://instagram.com/vignette.art',
+      'https://vignette.art',
+      'https://example.com/@vignette',
     ]);
   });
 
   it('skips unregistered keys and empty handles', () => {
-    const urls = getPersonaProfileUrls(mockPersona({ email: 'dev@example.com', twitter: '', fediverse: 'not-a-handle' }));
+    const urls = getPersonaProfileUrls(mockPersona({ email: 'hello@example.com', twitter: '', fediverse: 'not-a-handle' }));
 
     expect(urls).toEqual([]);
   });
